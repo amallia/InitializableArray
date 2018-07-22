@@ -73,8 +73,8 @@ class InitializableArray {
         using reference = typename std::vector<T>::iterator::reference;
 
 
-        iterator(const InitializableArray<T> &initializableArray, size_t pos)
-            : m_initializableArray(initializableArray), m_pos(pos) {}
+        iterator(const InitializableArray<T> *initializableArray_ptr, size_t pos)
+            : m_initializableArray_ptr(initializableArray_ptr), m_pos(pos) {}
 
         iterator &operator++() {
             ++m_pos;
@@ -85,22 +85,19 @@ class InitializableArray {
             return m_pos - other.m_pos;
         }
 
-        const T &operator*() { return m_initializableArray[m_pos]; }
+        const T &operator*() { return (*m_initializableArray_ptr)[m_pos]; }
 
         bool operator!=(iterator &other) const {
-            return m_pos != other.m_pos;// and m_initializableArray != other.m_initializableArray;
+            return m_pos != other.m_pos and m_initializableArray_ptr != other.m_initializableArray_ptr;
         }
 
        private:
-        const InitializableArray<T> &m_initializableArray;
+        const InitializableArray<T> *m_initializableArray_ptr;
         size_t                       m_pos;
     };
 
-    // iterator begin();
-    // iterator end();
-
-    iterator begin() { return iterator(*this, 0); }
-    iterator end() { return iterator(*this, m_values.capacity()); }
+    iterator begin() { return iterator(this, 0); }
+    iterator end() { return iterator(this, m_values.capacity()); }
 
    private:
     size_t              m_s;
