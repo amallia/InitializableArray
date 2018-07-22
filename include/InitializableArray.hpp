@@ -46,15 +46,23 @@ class InitializableArray {
     }
 
     inline void insert(size_t pos, const T &value) {
-        m_values.insert(m_values.begin() + pos, value);
-        m_from.insert(m_from.begin() + pos, m_s);
-        m_to.insert(m_to.begin() + m_s, pos);
+        m_values[pos] = value;
+        m_from[pos] = m_s;
+        m_to[pos] = pos;
         ++m_s;
     }
 
     inline size_t size() const { return m_values.capacity(); }
 
     inline void clear() { m_s = 0; }
+
+    inline void clear(size_t pos) {
+        if(isWritten(pos)){
+            m_to[m_from[pos]] = m_to[m_s];
+            m_from[m_to[m_s]] = m_from[pos];
+            --m_s;
+        }
+    }
 
     class iterator {
        public:

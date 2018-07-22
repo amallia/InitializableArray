@@ -54,6 +54,11 @@ int main(int argc, char const *argv[])
         std::cout << std::distance(a.end(), a.end()) << std::endl;
         std::cout << std::distance(a.end(), a.begin()) << std::endl;
 
+
+        a.insert(0, 10);
+        std::cout << a[0] << std::endl;
+        a.clear(0);
+        std::cout << a[0] << std::endl;
     }
 
     {
