@@ -26,6 +26,7 @@ else ()
     message(FATAL_ERROR "Please, use GCC or Clang compiler!")
 endif()
 
+add_subdirectory(external)
 
 include_directories(include)
 

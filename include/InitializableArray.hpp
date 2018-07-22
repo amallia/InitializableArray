@@ -11,7 +11,7 @@ class InitializableArray {
         if (m_s == 0) {
             return false;
         }
-        bool ret = (m_from[pos] >= 0 and m_from[pos] <= m_s and m_to[m_from[pos]] == pos);
+        bool ret = (m_from[pos] >= 0 and m_from[pos] < m_s and m_to[m_from[pos]] == pos);
         return ret;
     }
 
@@ -45,10 +45,10 @@ class InitializableArray {
         return m_values[pos];
     }
 
-    inline void insert(size_t pos, const T &value) {
+    inline void set(size_t pos, const T &value) {
         m_values[pos] = value;
         m_from[pos] = m_s;
-        m_to[pos] = pos;
+        m_to[m_s] = pos;
         ++m_s;
     }
 
@@ -81,14 +81,14 @@ class InitializableArray {
             return *this;
         }
 
-        difference_type operator-(iterator &other) {
+        difference_type operator-(iterator &other) const{
             return m_pos - other.m_pos;
         }
 
-        const T &operator*() { return (*m_initializableArray_ptr)[m_pos]; }
+        const T &operator*() const { return (*m_initializableArray_ptr)[m_pos]; }
 
-        bool operator!=(iterator &other) const {
-            return m_pos != other.m_pos and m_initializableArray_ptr != other.m_initializableArray_ptr;
+        bool operator!=(const iterator &other) const {
+            return m_pos != other.m_pos or m_initializableArray_ptr != other.m_initializableArray_ptr;
         }
 
        private:
@@ -96,8 +96,11 @@ class InitializableArray {
         size_t                       m_pos;
     };
 
-    iterator begin() { return iterator(this, 0); }
-    iterator end() { return iterator(this, m_values.capacity()); }
+    iterator begin() const { return iterator(this, 0); }
+    iterator end() const { return iterator(this, m_values.capacity()); }
+
+    using value_type = typename std::vector<T>::value_type;
+    using const_iterator = iterator;
 
    private:
     size_t              m_s;
