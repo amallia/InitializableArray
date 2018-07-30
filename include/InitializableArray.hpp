@@ -46,10 +46,12 @@ class InitializableArray {
     }
 
     inline void set(size_t pos, const T &value) {
+        if (!isWritten(pos)) {
+            m_from[pos] = m_s;
+            m_to[m_s] = pos;
+            ++m_s;
+        }
         m_values[pos] = value;
-        m_from[pos] = m_s;
-        m_to[m_s] = pos;
-        ++m_s;
     }
 
     inline size_t size() const { return m_values.capacity(); }
@@ -57,7 +59,9 @@ class InitializableArray {
     inline void clear() { m_s = 0; }
 
     inline void clear(size_t pos) {
-        if(isWritten(pos)){
+        if(m_s == 1) {
+            clear();
+        } else if(isWritten(pos)){
             m_to[m_from[pos]] = m_to[m_s];
             m_from[m_to[m_s]] = m_from[pos];
             --m_s;

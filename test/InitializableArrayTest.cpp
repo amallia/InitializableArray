@@ -54,6 +54,17 @@ TEST(InitializableArrayTest, TestClear) {
 
 }
 
+TEST(InitializableArrayTest, TestMultipleSet) {
+    const int defaultValue = 1;
+    const size_t size = 1;
+
+    InitializableArray<std::decay<decltype(defaultValue)>::type> a(size, defaultValue);
+    a.set(0, 2);
+    ASSERT_EQ(a[0], 2);
+
+    a.set(0, 3);
+    ASSERT_EQ(a[0], 3);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
